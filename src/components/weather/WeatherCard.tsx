@@ -12,11 +12,11 @@ import { useWeatherStore } from "@/store/apiStore";
 import Image from "next/image";
 
 const WeatherCard = () => {
-  const { weather, forecast } = useWeatherStore();
+  const { weather } = useWeatherStore();
 
   return (
     <MaxWidthWrapper className={cn(wrapperStyle)}>
-      <div className="w-full py-[169px]">
+      <div className="w-full py-[50px] sm:py-[169px]">
         {/* title part start*/}
         <Header />
         {/* title part end */}
