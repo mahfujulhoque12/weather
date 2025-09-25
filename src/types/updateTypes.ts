@@ -37,6 +37,4 @@ interface WeatherState {
   loading: boolean;
   error: string | null;
   loadWeather: (city: string) => Promise<void>;
-  loadForecast: (city: string) => Promise<void>;
-  searchCity: (query: string) => Promise<void>;
 }
