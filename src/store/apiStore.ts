@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { WeatherState } from "@/types/updateTypes";
 import { toast } from "sonner";
 import { create } from "zustand";
 
@@ -6,8 +7,25 @@ export const useWeatherStore = create<WeatherState>((set) => ({
   weather: null,
   forecast: null,
   cities: [],
+  suggestions: [],
   loading: false,
   error: null,
+
+  setSuggestions: (suggestions) => set({ suggestions }),
+
+  fetchSuggestions: async (query: string) => {
+    const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
+    if (!query) return set({ suggestions: [] });
+    try {
+      const res = await fetch(
+        `https://api.openweathermap.org/geo/1.0/direct?q=${query}&limit=5&appid=${API_KEY}`
+      );
+      const data = await res.json();
+      set({ suggestions: data });
+    } catch (err) {
+      console.error(err);
+    }
+  },
 
   loadWeather: async (city) => {
     const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
@@ -24,18 +42,18 @@ export const useWeatherStore = create<WeatherState>((set) => ({
       const weatherData = await weatherRes.json();
       const { coord } = weatherData;
 
-      const oneCallRes = await fetch(
+      const forecastRes = await fetch(
         `${BASE_URL}/forecast?lat=${coord.lat}&lon=${coord.lon}&appid=${API_KEY}&units=metric`
       );
+      if (!forecastRes.ok) throw new Error("Failed to fetch forecast");
 
-      if (!oneCallRes.ok) throw new Error("Failed to fetch 7-day forecast");
-
-      const forecastData = await oneCallRes.json();
+      const forecastData = await forecastRes.json();
 
       set({
         weather: weatherData,
         forecast: forecastData,
         loading: false,
+        suggestions: [],
       });
     } catch (err: any) {
       toast.error(err.message || "Something went wrong");

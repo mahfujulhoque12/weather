@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 interface WeatherData {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   sys: any;
   dt: number;
   name: string;
@@ -46,13 +46,17 @@ interface CityData {
   lat: number;
   lon: number;
   country: string;
+  state?: string;
 }
 
-interface WeatherState {
+export interface WeatherState {
   weather: WeatherData | null;
   forecast: ForecastData | null;
   cities: CityData[];
+  suggestions: CityData[];
   loading: boolean;
   error: string | null;
   loadWeather: (city: string) => Promise<void>;
+  setSuggestions: (suggestions: CityData[]) => void;
+  fetchSuggestions: (query: string) => Promise<void>;
 }
