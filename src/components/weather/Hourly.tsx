@@ -12,7 +12,7 @@ import {
 import React from "react";
 
 const Hourly = () => {
-  const { forecast } = useWeatherStore();
+  const { forecast, weather } = useWeatherStore();
 
   //  icon based on weather description
   const getIcon = (main: string) => {
@@ -46,8 +46,8 @@ const Hourly = () => {
     }) || [];
 
   // Extract today’s name
-  const today = forecast
-    ? new Date(forecast.list[0].dt * 1000).toLocaleDateString("en-US", {
+  const today = weather
+    ? new Date(weather.dt * 1000).toLocaleDateString("en-US", {
         weekday: "long",
       })
     : "";
