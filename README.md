@@ -13,7 +13,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 - Toast notifications for success/error using `Sonner`
 - State management with `Zustand`
 - Use Global Loader when API call
-- Show Autocomlete when search
+- Show Autocomplete when search
 - Feels like temperature
 - Humidity percentage
 - Wind speed
