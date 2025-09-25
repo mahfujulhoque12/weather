@@ -12,7 +12,8 @@ import { useWeatherStore } from "@/store/apiStore";
 import Image from "next/image";
 
 const WeatherCard = () => {
-  const { weather } = useWeatherStore();
+  const { weather, forecast } = useWeatherStore();
+
   return (
     <MaxWidthWrapper className={cn(wrapperStyle)}>
       <div className="w-full py-[169px]">
@@ -26,9 +27,9 @@ const WeatherCard = () => {
 
         {/* weather details part start  */}
         {weather ? (
-          <div className="flex flex-col lg:flex-row gap-6 mt-[32px]">
+          <div className="flex flex-col xl:flex-row gap-6 mt-[32px]">
             {/* detial left part start  */}
-            <div className="w-full lg:w-[65%]">
+            <div className="w-full xl:w-[65%]">
               <TempBox />
               <Details />
               <Daily />
@@ -36,7 +37,7 @@ const WeatherCard = () => {
             {/* detial left part end  */}
 
             {/* detial right part start  */}
-            <div className="w-full lg:w-[35%]">
+            <div className="w-full xl:w-[35%]">
               <Hourly />
             </div>
             {/* detial right part end  */}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useWeatherStore } from "@/store/apiStore";
@@ -13,19 +14,19 @@ import React from "react";
 const Hourly = () => {
   const { forecast } = useWeatherStore();
 
-  // Helper: pick icon based on weather description
+  //  icon based on weather description
   const getIcon = (main: string) => {
     switch (main) {
       case "Clear":
-        return <WiDaySunny className="text-2xl" />;
+        return <WiDaySunny className="text-yellow-400 text-2xl" />;
       case "Clouds":
-        return <WiDayCloudy className="text-2xl" />;
+        return <WiDayCloudy className="text-gray-300 text-2xl" />;
       case "Rain":
-        return <WiRain className="text-2xl" />;
+        return <WiRain className="text-blue-400 text-2xl" />;
       case "Night":
-        return <WiNightClear className="text-2xl" />;
+        return <WiNightClear className="text-indigo-500 text-2xl" />;
       default:
-        return <WiCloud className="text-2xl" />;
+        return <WiCloud className="text-gray-400 text-2xl" />;
     }
   };
 
@@ -34,7 +35,9 @@ const Hourly = () => {
     forecast?.list?.slice(0, 8).map((item: any) => {
       const date = new Date(item.dt * 1000);
       const hours = date.getHours();
-      const time = hours > 12 ? `${hours - 12} PM` : `${hours} AM`;
+      const hours12 = hours % 12 === 0 ? 12 : hours % 12;
+      const ampm = hours >= 12 ? "PM" : "AM";
+      const time = `${hours12} ${ampm}`;
       return {
         time,
         temperature: Math.round(item.main.temp) + "°",

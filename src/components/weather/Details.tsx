@@ -3,9 +3,15 @@ import React from "react";
 
 const Details = () => {
   const { weather, forecast } = useWeatherStore();
-  const feels_like = Math.round(weather?.main.feels_like);
+  const feels_like =
+    weather?.main?.feels_like !== undefined
+      ? Math.round(weather.main.feels_like)
+      : 0;
   const humidity = weather?.main.humidity;
-  const wind = Math.round(weather?.wind?.speed * 3.6);
+  const wind =
+    weather?.wind?.speed !== undefined
+      ? Math.round(weather.wind.speed * 3.6)
+      : 0;
   const firstForecast = forecast?.list?.[0];
   const precipitation =
     firstForecast?.rain?.["3h"] ?? firstForecast?.snow?.["3h"] ?? 0;

@@ -16,7 +16,7 @@ const Search = () => {
   return (
     <div className="mt-[32px]">
       <h1 className="text-center text-white font-light text-2xl sm:text-2xl md:text-4xl">
-        How's the sky looking today?
+        How&lsquo;s the sky looking today?
       </h1>
 
       {/* search box */}

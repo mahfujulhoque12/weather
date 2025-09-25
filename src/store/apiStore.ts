@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { toast } from "sonner";
 import { create } from "zustand";
 
@@ -15,16 +16,21 @@ export const useWeatherStore = create<WeatherState>((set) => ({
     set({ loading: true, error: null });
 
     try {
-      const [weatherRes, forecastRes] = await Promise.all([
-        fetch(`${BASE_URL}weather?q=${city}&appid=${API_KEY}&units=metric`),
-        fetch(`${BASE_URL}forecast?q=${city}&appid=${API_KEY}&units=metric`),
-      ]);
-
-      if (!weatherRes.ok) throw new Error("Failed to fetch weather");
-      if (!forecastRes.ok) throw new Error("Failed to fetch forecast");
+      const weatherRes = await fetch(
+        `${BASE_URL}/weather?q=${city}&appid=${API_KEY}&units=metric`
+      );
+      if (!weatherRes.ok) throw new Error("City not found");
 
       const weatherData = await weatherRes.json();
-      const forecastData = await forecastRes.json();
+      const { coord } = weatherData;
+
+      const oneCallRes = await fetch(
+        `${BASE_URL}/forecast?lat=${coord.lat}&lon=${coord.lon}&appid=${API_KEY}&units=metric`
+      );
+
+      if (!oneCallRes.ok) throw new Error("Failed to fetch 7-day forecast");
+
+      const forecastData = await oneCallRes.json();
 
       set({
         weather: weatherData,
@@ -32,7 +38,7 @@ export const useWeatherStore = create<WeatherState>((set) => ({
         loading: false,
       });
     } catch (err: any) {
-      toast.error("No City found");
+      toast.error(err.message || "Something went wrong");
       set({ error: err.message, loading: false });
     }
   },

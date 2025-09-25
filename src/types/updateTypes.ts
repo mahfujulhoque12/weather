@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 interface WeatherData {
+  sys: any;
+  dt: number;
   name: string;
   main: {
     temp: number;
@@ -8,19 +11,34 @@ interface WeatherData {
     feels_like: number;
   };
   weather: { main: string; description: string; icon: string }[];
+  wind: {
+    speed: number;
+  };
+}
+
+interface ForecastItem {
+  dt: number;
+  main: {
+    temp: number;
+    temp_min: number;
+    temp_max: number;
+    humidity: number;
+  };
+  weather: { main: string; description: string; icon: string }[];
+  wind?: {
+    speed: number;
+    deg: number;
+  };
+  rain?: {
+    [key: string]: number;
+  };
+  snow?: {
+    [key: string]: number;
+  };
 }
 
 interface ForecastData {
-  list: {
-    dt: number;
-    main: {
-      temp: number;
-      temp_min: number;
-      temp_max: number;
-      humidity: number;
-    };
-    weather: { main: string; description: string; icon: string }[];
-  }[];
+  list: ForecastItem[];
 }
 
 interface CityData {
