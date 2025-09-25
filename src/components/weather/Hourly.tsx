@@ -1,48 +1,53 @@
-import { WiDaySunny, WiCloud, WiNightClear, WiDayCloudy } from "react-icons/wi";
+"use client";
+
+import { useWeatherStore } from "@/store/apiStore";
+import {
+  WiDaySunny,
+  WiCloud,
+  WiNightClear,
+  WiDayCloudy,
+  WiRain,
+} from "react-icons/wi";
+import React from "react";
 
 const Hourly = () => {
-  const hourlyData = [
-    {
-      time: "3 PM",
-      temperature: "20°",
-      icon: <WiDaySunny className="text-2xl" />,
-    },
-    {
-      time: "4 PM",
-      temperature: "20°",
-      icon: <WiDaySunny className="text-2xl" />,
-    },
-    {
-      time: "5 PM",
-      temperature: "20°",
-      icon: <WiDayCloudy className="text-2xl" />,
-    },
-    {
-      time: "6 PM",
-      temperature: "19°",
-      icon: <WiCloud className="text-2xl" />,
-    },
-    {
-      time: "7 PM",
-      temperature: "18°",
-      icon: <WiCloud className="text-2xl" />,
-    },
-    {
-      time: "8 PM",
-      temperature: "18°",
-      icon: <WiNightClear className="text-2xl" />,
-    },
-    {
-      time: "9 PM",
-      temperature: "17°",
-      icon: <WiNightClear className="text-2xl" />,
-    },
-    {
-      time: "10 PM",
-      temperature: "17°",
-      icon: <WiNightClear className="text-2xl" />,
-    },
-  ];
+  const { forecast } = useWeatherStore();
+
+  // Helper: pick icon based on weather description
+  const getIcon = (main: string) => {
+    switch (main) {
+      case "Clear":
+        return <WiDaySunny className="text-2xl" />;
+      case "Clouds":
+        return <WiDayCloudy className="text-2xl" />;
+      case "Rain":
+        return <WiRain className="text-2xl" />;
+      case "Night":
+        return <WiNightClear className="text-2xl" />;
+      default:
+        return <WiCloud className="text-2xl" />;
+    }
+  };
+
+  // Map forecast.list to hourly data (limit 8 for next 24h)
+  const hourlyData =
+    forecast?.list?.slice(0, 8).map((item: any) => {
+      const date = new Date(item.dt * 1000);
+      const hours = date.getHours();
+      const time = hours > 12 ? `${hours - 12} PM` : `${hours} AM`;
+      return {
+        time,
+        temperature: Math.round(item.main.temp) + "°",
+        icon: getIcon(item.weather[0].main),
+      };
+    }) || [];
+
+  // Extract today’s name
+  const today = forecast
+    ? new Date(forecast.list[0].dt * 1000).toLocaleDateString("en-US", {
+        weekday: "long",
+      })
+    : "";
 
   return (
     <div className="bg-button border border-button-border h-full rounded-2xl p-6">
@@ -51,22 +56,26 @@ const Hourly = () => {
           Hourly forecast
         </h2>
         <span className="bg-[#374151] w-[120px] border border-[#4B5563] text-white text-sm font-normal py-1 px-3 rounded-lg">
-          Tuesday
+          {today}
         </span>
       </div>
       <div className="space-y-2 mt-[28px]">
-        {hourlyData.map((hour, index) => (
-          <div
-            key={index}
-            className="flex justify-between items-center py-3 text-white border-b border-button-border last:border-b-0"
-          >
-            <div className="flex items-center gap-2 text-base font-normal">
-              {hour.icon}
-              <span>{hour.time}</span>
+        {hourlyData.length > 0 ? (
+          hourlyData.map((hour, index) => (
+            <div
+              key={index}
+              className="flex justify-between items-center py-3 text-white border-b border-button-border last:border-b-0"
+            >
+              <div className="flex items-center gap-2 text-base font-normal">
+                {hour.icon}
+                <span>{hour.time}</span>
+              </div>
+              <span className="text-lg">{hour.temperature}</span>
             </div>
-            <span className="text-lg">{hour.temperature}</span>
-          </div>
-        ))}
+          ))
+        ) : (
+          <p className="text-white">No hourly data available</p>
+        )}
       </div>
     </div>
   );

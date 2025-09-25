@@ -5,34 +5,41 @@ import Image from "next/image";
 import Header from "./Header";
 import { cn } from "@/lib/utils";
 import { wrapperStyle } from "../common/CustomStyle";
+import WeatherCard from "../weather/WeatherCard";
+import { useWeatherStore } from "@/store/apiStore";
 
 const LandingCard = () => {
+  const { weather } = useWeatherStore();
+
   return (
     <MaxWidthWrapper className={cn(wrapperStyle)}>
-      <div className="w-full">
-        {/* title part start*/}
+      <div className="w-full py-[169px]">
+        {/* title part start */}
         <Header />
         {/* title part end */}
 
-        {/* serach part start  */}
+        {/* search part start */}
         <Search />
-        {/* serach part end  */}
+        {/* search part end */}
 
-        {/* bottom part start  */}
-        <div className="mt-[50px] sm:mt-[96px]">
-          <div className="flex justify-center">
-            <Image
-              src={"/landing/landing.png"}
-              width={96}
-              height={96}
-              alt="lading-img"
-            />
+        {/* Conditional rendering for show weather info */}
+        {weather ? (
+          <WeatherCard />
+        ) : (
+          <div className="mt-[50px] sm:mt-[96px]">
+            <div className="flex justify-center">
+              <Image
+                src={"/landing/landing.png"}
+                width={96}
+                height={96}
+                alt="landing-img"
+              />
+            </div>
+            <p className="mt-4.5 text-paragraph font-normal text-lg text-center">
+              Search for a city to see weather information
+            </p>
           </div>
-          <p className="mt-4.5 text-paragraph font-normal text-lg text-center">
-            Search for a city to see weather information
-          </p>
-        </div>
-        {/* bottom part end  */}
+        )}
       </div>
     </MaxWidthWrapper>
   );
