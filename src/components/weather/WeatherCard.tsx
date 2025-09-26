@@ -16,7 +16,7 @@ const WeatherCard = () => {
 
   return (
     <MaxWidthWrapper className={cn(wrapperStyle)}>
-      <div className="w-full py-[50px] sm:py-[169px]">
+      <div className="w-full py-[50px] sm:py-[130px]">
         {/* title part start*/}
         <Header />
         {/* title part end */}
